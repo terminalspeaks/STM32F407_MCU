@@ -29,6 +29,7 @@
 #define GPIOD_MODER     (*(volatile uint32_t *)(GPIOD_BASE + 0x00))
 #define GPIOD_ODR       (*(volatile uint32_t *)(GPIOD_BASE + 0x14))
 
+
 void delay(void)
 {
     for(uint32_t i = 0; i < 500000; i++);
@@ -40,17 +41,26 @@ int main(void)
     RCC_AHB1ENR |= (1U << 3);
 
     /* Configure PD12 as output */
-    GPIOD_MODER &= ~(3U << (12 * 2));
-    GPIOD_MODER |=  (1U << (12 * 2));
+    GPIOD_MODER = (GPIOD_MODER & ~(3U << (12*2))) | (1U << (12*2));
+
+    /* Configure PD13 as output */
+    GPIOD_MODER = (GPIOD_MODER & ~(3U << (13*2))) | (1U << (13*2));
+
+    /* Configure PD14 as output */
+    GPIOD_MODER = (GPIOD_MODER & ~(3U << (14*2))) | (1U << (14*2));
+
+    /* Configure PD15 as output */
+    GPIOD_MODER = (GPIOD_MODER & ~(3U << (15*2))) | (1U << (15*2));
+
 
     while(1)
     {
         /* LED ON */
-        GPIOD_ODR |= (1U << 12);
+        GPIOD_ODR |= (1U << 12) | (1U << 13) | (1U << 14) | (1U << 15);
         delay();
 
         /* LED OFF */
-        GPIOD_ODR &= ~(1U << 12);
+        GPIOD_ODR &= ~((1U << 12) | (1U << 13) | (1U << 14) | (1U << 15));
         delay();
     }
 }
